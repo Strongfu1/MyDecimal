@@ -1,4 +1,4 @@
-GCC=-Wall -Wextra -Werror -g
+GCC=-Wall -Wextra -Werror
 CHKMK=clean_mode=1
 OS=$(shell uname)
 ifeq ($(OS), Linux)
@@ -17,20 +17,20 @@ s21_decimal.o: s21_decimal.c s21_decimal.h
 s21_decimal.a: s21_decimal.o 
 	ar rcs s21_decimal.a s21_decimal.o
 
-test: clean 
-	checkmk $(CHKMK) SharpTestsBig.check > test.c
+tests: clean 
+	checkmk $(CHKMK) SharpTestsBig.check > tests.c
 	gcc --coverage -c s21_decimal.c $(LIBS)
 	ar rcs s21_decimal.a s21_decimal.o
-	gcc -c test.c $(LIBS)
-	gcc --coverage -o test test.o s21_decimal.a $(LIBS)
-	./test
+	gcc -c tests.c $(LIBS)
+	gcc --coverage -o tests tests.o s21_decimal.a $(LIBS)
+	./tests
 
-gcov_report: test
+gcov_report: tests
 	lcov -t "gcov_report" -o s21_decimal.info -c -d .
 	genhtml -o gcov_report s21_decimal.info
 
 clean:
-	rm -rf *.o *.a *.gcda *.gcno *.info gcov_report tests a.out *.exe Output.txt test test.c cpplint.py CPPLINT.cfg
+	rm -rf *.o *.a *.gcda *.gcno *.info gcov_report tests a.out *.exe Output.txt tests.c cpplint.py CPPLINT.cfg
 
 check: 
 	cp ../materials/linters/CPPLINT.cfg CPPLINT.cfg
@@ -45,4 +45,4 @@ check:
 
 
 
-.PHONY: clean check s21_decimal.a s21_decimal.o test gcov_report
+.PHONY: clean check s21_decimal.a s21_decimal.o tests gcov_report
